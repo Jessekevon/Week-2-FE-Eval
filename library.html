@@ -2,37 +2,126 @@
 <head>
   <title>Week 2 Frontend Project</title>
   <style type="text/css">
+
     #templates { display: none; }
+
     small { position: fixed; bottom: 4px; right: 4px; }
+    
+    h1 {
+      font-family: Moonshiner-Sharp;
+      text-align: center;
+      font-size: 100px;
+      color: #736656
+    }
+
     #library .book {
-      background: #ccc;
-      width: 200px;
+      background: #E0E0E0;
       float: left;
       padding: 1px 20px;
     }
     #library .book h3 {
-      font-style: italic;
+      font-style: helvetica;
     }
     #library .book h5 {
       font-weight: normal;
+    }
+
+    #input {
+      display: block;
+      text-align: center;
+    }
+
+    #button {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #top {
+      background-color: #E4EDF7;
     }
   </style>
 </head>
 <body>
 
-<h1>THE LIBRARY</h1>
+  <div id="top">
 
+    <h1>THE LIBRARY</h1>
 
-<div id="library"></div>
+      <div id="input">
+        <input id="title" type="text" placeholder="Title"></input>
+        <input id="author" type="text" placeholder="Author"></input>
+      </div>
+      <!-- add button-->
+      <div id="button">
+        <button id="add">Add Book</button>
+      </div>
 
-<div id="templates">
+      <div id="library"></div>
 
-</div>
+        <div id="templates">
+          <script class="list" type="text/template">
+            <div class="book">
+                <h3>Title: <%=title%></h3>
+                <h5>Author: <%=author%></h5>
+                <p>Status: <%=status%></p>
+            </div>
+          </script>
+        </div> 
+
+  </div><!--Closes "top" ID!-->
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 <script type="text/javascript">
-  // TODO
+
+  // Books array:
+
+  var books = [
+    {
+      title: "The Great Gatsby",
+      author: " F. Scott Fitzgerald",
+      status: "Available"
+    },
+
+    {
+      title: 'War of The Worlds',
+      author: 'H.G. Wells',
+      status: 'Available'
+    },
+
+    {
+      title: 'Lord of The Rings',
+      author: 'Tolkien',
+      status: 'Available'
+    }
+  ];
+
+ //wrap for loop into function
+  var renderLibrary = function() {
+
+    //Iterate through each of the books in the array.
+    for (var i = 0; i < books.length; i++) { //i++ is a more effecient form of incrementing by 1 {
+      var newBookHtml = bookTemplate(books[i]);
+      $('#library').append(newBookHtml);
+    }
+  };
+
+    // Grabs the template html and creates a template function.
+    var bookTemplateHtml = $('#templates .list').html(); // .html returns the html of an element as a string. This takes our books template and stores it in a variable.
+    var bookTemplate = _.template(bookTemplateHtml); // returns a new template function. When called, it returns new html that looks like a template.
+
+    $('#add').on('click', function (e) {
+      var add_title = $('#title').val();
+      var add_author = $('#author').val();
+
+    newBookHtml = bookTemplate({ title: add_title, author: add_author, status: 'Available' });
+
+  $('#library').append(newBookHtml);
+  });
+
+// Calls the renderLibrary function
+renderLibrary();
+
 </script>
 
 <small>It's back.</small>
